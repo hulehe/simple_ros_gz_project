@@ -53,7 +53,7 @@ Or start by creating a workspace and cloning the template repository:
     source /opt/ros/$ROS_DISTRO/setup.bash
     sudo rosdep init
     rosdep update
-    rosdep install --from-paths src --ignore-src -r -i -y --rosdistro <ROS_DISTRO>
+    rosdep install --from-paths src --ignore-src -r -i -y --rosdistro $ROS_DISTRO
     ```
 
 1. Build the project
