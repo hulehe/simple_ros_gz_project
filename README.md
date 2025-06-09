@@ -73,5 +73,9 @@ Or start by creating a workspace and cloning the template repository:
     ```bash
     ros2 launch ros_gz_example_bringup diff_drive.launch.py
     ```
+1. Publish /cmd_vel to drive vehicle to move
+    ```bash
+    ros2 topic pub --once /diff_drive/cmd_vel geometry_msgs/msg/Twist "{linear: {x: 5.0, y: 0.0, z: 0.0}, angular: {x: 0.0, y: 0.0, z: -0.1}}"
+    ```
 
 For a more detailed guide on using this template see [documentation](https://gazebosim.org/docs/latest/ros_gz_project_template_guide).
