@@ -5,7 +5,7 @@
     ros2 topic pub /diff_drive/cmd_vel geometry_msgs/msg/Twist "{linear: {x: 5.0, y: 0.0, z: 0.0}, angular: {x: 0.0, y: 0.0, z: -0.1}}"
   Listen to odometry:
     gz topic -e -t /model/diff_drive/odometry
-    ros2 topic echo /model/diff_drive/odometry
+    ros2 topic echo /diff_drive/odometry
 -->
 <sdf version="1.8">
   <world name="demo">
