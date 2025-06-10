@@ -36,9 +36,12 @@ def generate_launch_description():
     pkg_ros_gz_sim = get_package_share_directory('ros_gz_sim')
 
     # Load the SDF file from "description" package
-    urdf_file  =  os.path.join(pkg_project_description, 'models', 'diff_drive', 'model.urdf')
-    with open(urdf_file, 'r') as infp:
+    robot_urdf_file  =  os.path.join(pkg_project_description, 'models', 'diff_drive', 'model.urdf')
+    with open(robot_urdf_file, 'r') as infp:
         robot_desc = infp.read()
+    wall_sdf_file  =  os.path.join(pkg_project_description, 'models', 'wall', 'model.sdf')
+    with open(wall_sdf_file, 'r') as infp:
+        wall_desc = infp.read()
 
     # Setup to launch the simulator and Gazebo world
     gz_sim = IncludeLaunchDescription(
@@ -60,6 +63,7 @@ def generate_launch_description():
         parameters=[
             {'use_sim_time': True},
             {'robot_description': robot_desc},
+            {'wall_description': wall_desc},
         ]
     )
 

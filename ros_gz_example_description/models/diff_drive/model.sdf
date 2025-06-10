@@ -191,6 +191,7 @@
               <resolution>0.01</resolution>
             </range>
           </lidar>
+          <always_on>1</always_on>
           <visualize>true</visualize>
         </sensor>
       </link>
