@@ -22,7 +22,7 @@
 // All others will depend on what your plugin does.
 #include <gz/sim/System.hh>
 
-namespace ros_gz_example_gazebo
+namespace gz_worlds
 {
   // This is the main plugin's class. It must inherit from System and at least
   // one other interface.

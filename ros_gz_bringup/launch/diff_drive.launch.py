@@ -30,16 +30,16 @@ def generate_launch_description():
     # Configure ROS nodes for launch
 
     # Setup project paths
-    pkg_project_bringup = get_package_share_directory('ros_gz_example_bringup')
-    pkg_project_gazebo = get_package_share_directory('ros_gz_example_gazebo')
-    pkg_project_description = get_package_share_directory('ros_gz_example_description')
+    pkg_ros_gz_bringup = get_package_share_directory('ros_gz_bringup')
+    pkg_gz_worlds = get_package_share_directory('gz_worlds')
+    pkg_gz_models = get_package_share_directory('gz_models')
     pkg_ros_gz_sim = get_package_share_directory('ros_gz_sim')
 
     # Load the SDF file from "description" package
-    robot_urdf_file  =  os.path.join(pkg_project_description, 'models', 'diff_drive', 'model.urdf')
+    robot_urdf_file  =  os.path.join(pkg_gz_models, 'models', 'diff_drive', 'model.urdf')
     with open(robot_urdf_file, 'r') as infp:
         robot_desc = infp.read()
-    wall_sdf_file  =  os.path.join(pkg_project_description, 'models', 'wall', 'model.sdf')
+    wall_sdf_file  =  os.path.join(pkg_gz_models, 'models', 'wall', 'model.sdf')
     with open(wall_sdf_file, 'r') as infp:
         wall_desc = infp.read()
 
@@ -48,7 +48,7 @@ def generate_launch_description():
         PythonLaunchDescriptionSource(
             os.path.join(pkg_ros_gz_sim, 'launch', 'gz_sim.launch.py')),
         launch_arguments={'gz_args': PathJoinSubstitution([
-            pkg_project_gazebo,
+            pkg_gz_worlds,
             'worlds',
             'diff_drive.sdf'
         ])}.items(),
@@ -71,7 +71,7 @@ def generate_launch_description():
     rviz = Node(
        package='rviz2',
        executable='rviz2',
-       arguments=['-d', os.path.join(pkg_project_bringup, 'config', 'diff_drive.rviz')],
+       arguments=['-d', os.path.join(pkg_ros_gz_bringup, 'config', 'diff_drive.rviz')],
        condition=IfCondition(LaunchConfiguration('rviz'))
     )
 
@@ -80,7 +80,7 @@ def generate_launch_description():
         package='ros_gz_bridge',
         executable='parameter_bridge',
         parameters=[{
-            'config_file': os.path.join(pkg_project_bringup, 'config', 'ros_gz_example_bridge.yaml'),
+            'config_file': os.path.join(pkg_ros_gz_bringup, 'config', 'ros_gz_bridge_config.yaml'),
             'qos_overrides./tf_static.publisher.durability': 'transient_local',
         }],
         output='screen'

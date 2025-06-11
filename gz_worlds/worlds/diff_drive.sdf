@@ -28,11 +28,11 @@
     </plugin>
     <plugin
       filename="BasicSystem"
-      name="ros_gz_example_gazebo::BasicSystem">
+      name="gz_worlds::BasicSystem">
     </plugin>
     <plugin
       filename="FullSystem"
-      name="ros_gz_example_gazebo::FullSystem">
+      name="gz_worlds::FullSystem">
     </plugin>
 
     <light name="sun" type="directional">
