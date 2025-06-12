@@ -297,12 +297,12 @@
             </link>
         </model>
 
-        <model name="diff_drive_robot">
+        <!-- <model name="diff_drive_robot">
             <include merge="true">
                 <uri>model://diff_drive</uri>
                 <pose>0 0 0.35 0 0 0</pose>
             </include>
-        </model>
+        </model> -->
 
         <model name="wall">
             <pose>2 0 0 0 0 0</pose>

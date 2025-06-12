@@ -33,17 +33,18 @@ def launch_setup(context, *args, **kwargs):
     pkg_gz_models = get_package_share_directory('gz_models')
     pkg_ros_gz_sim = get_package_share_directory('ros_gz_sim')
 
+    robot_model_name = LaunchConfiguration('robot_model_name').perform(context)
 
     # Load the SDF file from "description" package
-    robot_xacro_file  =  os.path.join(pkg_gz_models, 'models', 'urdf', 'diff_drive.urdf')
-    # robot_desc = xacro.process_file(
-    #     robot_xacro_file,
-    #     mappings={
-    #         'lidar_topic': lidar_topic,  # 设置外部参数
-    #     }
-    # ).toxml()
-    with open(robot_xacro_file, 'r') as infp:
-        robot_desc = infp.read()
+    robot_xacro_file  =  os.path.join(pkg_gz_models, 'models', 'urdf', 'diff_drive.xacro')
+    robot_desc = xacro.process_file(
+        robot_xacro_file,
+        mappings={
+            'robot_model_name': robot_model_name  # 设置外部参数
+        }
+    ).toxml()
+    # with open(robot_xacro_file, 'r') as infp:
+    #     robot_desc = infp.read()
 
     wall_sdf_file  =  os.path.join(pkg_gz_models, 'models', 'sdf', 'wall', 'model.sdf')
     with open(wall_sdf_file, 'r') as infp:
@@ -86,7 +87,7 @@ def launch_setup(context, *args, **kwargs):
         package='ros_gz_sim',
         executable='create',
         arguments=['-topic', 'robot_description', 
-                   '-name', 'diff_drive', 
+                   '-name', robot_model_name, 
                    'z', '0.35'],
         output='screen'
     )
@@ -102,13 +103,14 @@ def launch_setup(context, *args, **kwargs):
     return [
         robot_state_publisher,         
         gz_sim, 
-        # diff_drive, 
+        diff_drive, 
         bridge, 
-        rviz
+        # rviz
         ]
 
 def generate_launch_description():
     return LaunchDescription([
         DeclareLaunchArgument('rviz', default_value='true', description='Open RViz.'),
+        DeclareLaunchArgument('robot_model_name', default_value='diff_drive_robot', description='Robot model name in world.'),
         OpaqueFunction(function=launch_setup)
     ])

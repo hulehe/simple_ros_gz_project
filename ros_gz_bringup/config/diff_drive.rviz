@@ -174,7 +174,7 @@ Visualization Manager:
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
-    Fixed Frame: diff_drive/odom
+    Fixed Frame: diff_drive_robot/odom
     Frame Rate: 30
   Name: root
   Tools:

@@ -2,7 +2,7 @@
 <robot name="diff_drive" xmlns:xacro="http://ros.org/wiki/xacro">
 
     <!-- External Arguments -->
-    <xacro:arg name="lidar_topic" default="scan" />
+    <xacro:arg name="robot_model_name" default="diff_drive" />
 
     <!-- Properties -->
     <xacro:property name="chassis_length" value="2.01142" />
@@ -179,8 +179,8 @@
         <plugin
             filename="gz-sim-odometry-publisher-system"
             name="gz::sim::systems::OdometryPublisher">
-            <odom_frame>diff_drive/odom</odom_frame>
-            <robot_base_frame>chassis</robot_base_frame>
+            <odom_frame>$(arg robot_model_name)/odom</odom_frame>
+            <robot_base_frame>$(arg robot_model_name)</robot_base_frame>
         </plugin>
     </gazebo>
 
@@ -188,8 +188,8 @@
     <gazebo reference="lidar_link">
         <sensor name="gpu_lidar" type="gpu_lidar">
             <pose>0 0 0 0 0 0</pose>
-            <topic>$(arg lidar_topic)</topic>
-            <gz_frame_id>diff_drive/lidar_link</gz_frame_id>
+            <topic>/model/$(arg robot_model_name)/scan</topic>
+            <gz_frame_id>$(arg robot_model_name)/lidar_link</gz_frame_id>
             <update_rate>10</update_rate>
             <lidar>
                 <scan>
