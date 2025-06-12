@@ -8,7 +8,7 @@
     ros2 topic echo /diff_drive/odometry
 -->
 <sdf version="1.8">
-  <world name="demo">
+  <world name="diff_drive_world">
     <plugin
       filename="gz-sim-physics-system"
       name="gz::sim::systems::Physics">

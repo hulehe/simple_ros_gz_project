@@ -17,48 +17,40 @@ import os
 from ament_index_python.packages import get_package_share_directory
 
 from launch import LaunchDescription
-from launch.actions import DeclareLaunchArgument
+from launch.actions import DeclareLaunchArgument, OpaqueFunction
 from launch.actions import IncludeLaunchDescription
 from launch.conditions import IfCondition
 from launch.launch_description_sources import PythonLaunchDescriptionSource
-from launch.substitutions import LaunchConfiguration, PathJoinSubstitution
+from launch.substitutions import LaunchConfiguration
 import xacro
 from launch_ros.actions import Node
+from launch import LaunchContext
 
-
-def generate_launch_description():
-    # Configure ROS nodes for launch
-
+def launch_setup(context, *args, **kwargs):
     # Setup project paths
     pkg_ros_gz_bringup = get_package_share_directory('ros_gz_bringup')
     pkg_gz_worlds = get_package_share_directory('gz_worlds')
     pkg_gz_models = get_package_share_directory('gz_models')
     pkg_ros_gz_sim = get_package_share_directory('ros_gz_sim')
 
+
     # Load the SDF file from "description" package
-    robot_xacro_file  =  os.path.join(pkg_gz_models, 'models', 'urdf', 'diff_drive.xacro')
-    robot_desc = xacro.process_file(
-        robot_xacro_file,
-        mappings={
-            'lidar_topic': '/model/diff_drive/scan',  # 设置外部参数
-        }
-    ).toxml()
-    # with open(robot_urdf_file, 'r') as infp:
-    #     robot_desc = infp.read()
+    robot_xacro_file  =  os.path.join(pkg_gz_models, 'models', 'urdf', 'diff_drive.urdf')
+    # robot_desc = xacro.process_file(
+    #     robot_xacro_file,
+    #     mappings={
+    #         'lidar_topic': lidar_topic,  # 设置外部参数
+    #     }
+    # ).toxml()
+    with open(robot_xacro_file, 'r') as infp:
+        robot_desc = infp.read()
+
     wall_sdf_file  =  os.path.join(pkg_gz_models, 'models', 'sdf', 'wall', 'model.sdf')
     with open(wall_sdf_file, 'r') as infp:
         wall_desc = infp.read()
 
     # Setup to launch the simulator and Gazebo world
-    gz_sim = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource(
-            os.path.join(pkg_ros_gz_sim, 'launch', 'gz_sim.launch.py')),
-        launch_arguments={'gz_args': PathJoinSubstitution([
-            pkg_gz_worlds,
-            'worlds',
-            'diff_drive.sdf'
-        ])}.items(),
-    )
+    world_file = os.path.join(pkg_gz_worlds,'worlds','sensor_world.sdf')
 
     # Takes the description and joint angles as inputs and publishes the 3D poses of the robot links
     robot_state_publisher = Node(
@@ -69,8 +61,34 @@ def generate_launch_description():
         parameters=[
             {'use_sim_time': True},
             {'robot_description': robot_desc},
-            {'wall_description': wall_desc},
+            # {'wall_description': wall_desc},
         ]
+    )
+
+    bridge = Node(
+        package='ros_gz_bridge',
+        executable='parameter_bridge',
+        parameters=[{
+            'config_file': os.path.join(pkg_ros_gz_bringup, 'config', 'ros_gz_bridge_config.yaml'),
+            'qos_overrides./tf_static.publisher.durability': 'transient_local',
+        }],
+        output='screen'
+    )
+    
+    gz_sim = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(
+            os.path.join(pkg_ros_gz_sim, 'launch', 'gz_sim.launch.py')),
+        launch_arguments={'gz_args': world_file}.items(),
+    )
+    
+    # 加载机器人到世界
+    diff_drive = Node(
+        package='ros_gz_sim',
+        executable='create',
+        arguments=['-topic', 'robot_description', 
+                   '-name', 'diff_drive', 
+                   'z', '0.35'],
+        output='screen'
     )
 
     # Visualize in RViz
@@ -81,34 +99,16 @@ def generate_launch_description():
        condition=IfCondition(LaunchConfiguration('rviz'))
     )
 
-    # Bridge ROS topics and Gazebo messages for establishing communication
-    bridge = Node(
-        package='ros_gz_bridge',
-        executable='parameter_bridge',
-        parameters=[{
-            'config_file': os.path.join(pkg_ros_gz_bringup, 'config', 'ros_gz_bridge_config.yaml'),
-            'lidar_topic': LaunchConfiguration('lidar_topic', default='scan'),
-            'qos_overrides./tf_static.publisher.durability': 'transient_local',
-        }],
-        output='screen'
-    )
-    
-    # 加载机器人到世界
-    robot_node = Node(
-        package='ros_gz_sim',
-        executable='create',
-        arguments=['-topic', 'robot_description', '-name', 'diff_drive'],
-        output='screen'
-    )
-
-    return LaunchDescription([
-        gz_sim,
-        DeclareLaunchArgument('rviz', default_value='true',
-                              description='Open RViz.'),
-        DeclareLaunchArgument('lidar_topic', default_value='/diff_drive_robot/scan',
-                              description='Lidar topic.'), 
-        robot_node,
-        bridge,
-        robot_state_publisher,
+    return [
+        robot_state_publisher,         
+        gz_sim, 
+        # diff_drive, 
+        bridge, 
         rviz
+        ]
+
+def generate_launch_description():
+    return LaunchDescription([
+        DeclareLaunchArgument('rviz', default_value='true', description='Open RViz.'),
+        OpaqueFunction(function=launch_setup)
     ])

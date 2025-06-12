@@ -94,7 +94,7 @@ Visualization Manager:
         Inertia: false
         Mass: false
       Name: RobotModel
-      TF Prefix: diff_drive
+      TF Prefix: diff_drive_robot
       Update Interval: 0
       Value: true
       Visual Enabled: true
@@ -135,7 +135,7 @@ Visualization Manager:
         Filter size: 10
         History Policy: Keep Last
         Reliability Policy: Reliable
-        Value: /diff_drive/odometry
+        Value: /diff_drive_robot/odometry
       Value: true
     - Alpha: 1
       Autocompute Intensity Bounds: true
@@ -167,7 +167,7 @@ Visualization Manager:
         Filter size: 10
         History Policy: Keep Last
         Reliability Policy: Reliable
-        Value: /diff_drive/scan
+        Value: /diff_drive_robot/scan
       Use Fixed Frame: true
       Use rainbow: true
       Value: true
