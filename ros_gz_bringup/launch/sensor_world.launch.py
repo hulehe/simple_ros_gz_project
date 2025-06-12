@@ -62,6 +62,10 @@ def launch_setup(context, *args, **kwargs):
         parameters=[
             {'use_sim_time': True},
             {'robot_description': robot_desc},
+            # 使用frame_prefix使得gz-sim-pose-publisher-system发布的tf和robot_state_publisher发布的tf关联在一起
+            # 但是，在实际应用中两者是不应该直接关联的，前者应该用于ros算法得到的机器人的位姿的误差计算
+            # 本例中，不使用IMU或GNSS等定位手段，所以进行关联
+            {'frame_prefix': robot_model_name+'/'},  
             # {'wall_description': wall_desc},
         ]
     )
