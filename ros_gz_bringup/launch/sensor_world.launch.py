@@ -92,7 +92,7 @@ def launch_setup(context, *args, **kwargs):
         executable='create',
         arguments=['-topic', 'robot_description', 
                    '-name', robot_model_name, 
-                   'z', '0.35'],
+                   'z', '1'],
         output='screen'
     )
 
@@ -109,7 +109,7 @@ def launch_setup(context, *args, **kwargs):
         gz_sim, 
         diff_drive, 
         bridge, 
-        # rviz
+        rviz
         ]
 
 def generate_launch_description():

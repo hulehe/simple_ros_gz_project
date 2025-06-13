@@ -60,6 +60,8 @@
         </joint>
     </xacro:macro>
 
+    <link name="base_link"></link>
+
     <!-- Chassis -->
     <link name="chassis">
         <inertial>
@@ -82,6 +84,12 @@
             </geometry>
         </collision>
     </link>
+
+    <joint name="chassis_joint" type="fixed">
+        <parent link="base_link"/>
+        <child link="chassis"/>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+    </joint>
 
     <!-- Instantiate wheels -->
     <xacro:wheel name="left" side="1" />
