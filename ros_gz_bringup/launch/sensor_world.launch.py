@@ -92,7 +92,7 @@ def launch_setup(context, *args, **kwargs):
         executable='create',
         arguments=['-topic', 'robot_description', 
                    '-name', robot_model_name, 
-                   'z', '1'],
+                   '-z', '1'],
         output='screen'
     )
 
