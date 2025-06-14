@@ -305,7 +305,7 @@
         </model> -->
 
         <model name="wall">
-            <pose>2 0 0 0 0 0</pose>
+            <pose>10 0 0 0 0 0</pose>
             <include merge="true">
                 <uri>package://wall</uri>
             </include>

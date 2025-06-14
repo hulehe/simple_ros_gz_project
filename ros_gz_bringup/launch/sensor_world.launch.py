@@ -67,6 +67,9 @@ def launch_setup(context, *args, **kwargs):
             # 本例中，不使用IMU或GNSS等定位手段，所以进行关联
             {'frame_prefix': robot_model_name+'/'},  
             # {'wall_description': wall_desc},
+        ],
+        remappings=[
+            ('robot_description', robot_model_name+'_description')
         ]
     )
 
@@ -90,7 +93,7 @@ def launch_setup(context, *args, **kwargs):
     diff_drive = Node(
         package='ros_gz_sim',
         executable='create',
-        arguments=['-topic', 'robot_description', 
+        arguments=['-topic', '/'+robot_model_name+'_description', 
                    '-name', robot_model_name, 
                    '-z', '1'],
         output='screen'
