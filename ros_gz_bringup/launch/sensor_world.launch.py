@@ -36,6 +36,10 @@ def launch_setup(context, *args, **kwargs):
     robot_model_name = LaunchConfiguration('robot_model_name').perform(context)
 
     # Load the SDF file from "description" package
+    # robot_xacro_file  =  os.path.join(pkg_gz_models, 'models', 'sdf', 'diff_drive', 'model.sdf')
+    # with open(robot_xacro_file, 'r') as infp:
+    #     robot_desc = infp.read()
+    
     robot_xacro_file  =  os.path.join(pkg_gz_models, 'models', 'urdf', 'diff_drive.xacro')
     robot_desc = xacro.process_file(
         robot_xacro_file,
@@ -43,8 +47,7 @@ def launch_setup(context, *args, **kwargs):
             'robot_model_name': robot_model_name  # 设置外部参数
         }
     ).toxml()
-    # with open(robot_xacro_file, 'r') as infp:
-    #     robot_desc = infp.read()
+    
 
     wall_sdf_file  =  os.path.join(pkg_gz_models, 'models', 'sdf', 'wall', 'model.sdf')
     with open(wall_sdf_file, 'r') as infp:
@@ -62,14 +65,11 @@ def launch_setup(context, *args, **kwargs):
         parameters=[
             {'use_sim_time': True},
             {'robot_description': robot_desc},
-            # 使用frame_prefix使得gz-sim-pose-publisher-system发布的tf和robot_state_publisher发布的tf关联在一起
-            # 但是，在实际应用中两者是不应该直接关联的，前者应该用于ros算法得到的机器人的位姿的误差计算
-            # 本例中，不使用IMU或GNSS等定位手段，所以进行关联
             {'frame_prefix': robot_model_name+'/'},  
-            # {'wall_description': wall_desc},
         ],
         remappings=[
-            ('robot_description', robot_model_name+'_description')
+            ('robot_description', robot_model_name + '_description'),
+            ('joint_states', robot_model_name + '/joint_states')
         ]
     )
 
