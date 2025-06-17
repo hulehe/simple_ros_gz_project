@@ -304,12 +304,12 @@
             </include>
         </model> -->
 
-        <model name="wall">
+        <!-- <model name="wall">
             <pose>10 0 0 0 0 0</pose>
             <include merge="true">
                 <uri>package://wall</uri>
             </include>
-        </model>
+        </model> -->
 
         <!--stop
         when hit the wall-->

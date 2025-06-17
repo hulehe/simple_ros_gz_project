@@ -1,0 +1,64 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro" name="wall">
+
+    <xacro:arg name="robot_model_name" default="diff_drive" />
+
+    <xacro:property name="wall_name" value="wall" />
+    <xacro:property name="link_name" value="box" />
+    <xacro:property name="visual_size" value="0.5 10.0 2.0" />
+    <xacro:property name="color" value="1.0 1.0 0.0 1" />
+    <xacro:property name="mass" value="1.14395" />
+    <xacro:property name="ixx" value="9.532917" />
+    <xacro:property name="iyy" value="0.023832" />
+    <xacro:property name="izz" value="9.556749" />
+
+    <xacro:macro name="touch_plugin" params="target">
+        <plugin name="touch_${target}" filename="gz-sim-touchplugin-system">
+            <target>${target}</target>
+            <namespace>wall</namespace>
+            <time>0.1</time>
+            <enabled>true</enabled>
+        </plugin>
+    </xacro:macro>
+
+    <link name="${link_name}">
+        <inertial>
+            <mass value="${mass}" />
+            <inertia ixx="${ixx}" ixy="0" ixz="0" iyy="${iyy}" iyz="0" izz="${izz}" />
+        </inertial>
+        <visual>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <box size="${visual_size}" />
+            </geometry>
+            <material name="blue">
+                <color rgba="${color}" />
+            </material>
+        </visual>
+        <collision>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <box size="${visual_size}" />
+            </geometry>
+        </collision>
+    </link>
+
+    <gazebo reference="${link_name}">
+        <!-- Contact sensor -->
+        <sensor name="sensor_contact" type="contact">
+            <contact>
+                <collision>collision</collision>
+            </contact>
+        </sensor>
+
+        <!-- Touch plugin -->
+        <xacro:touch_plugin target="$(arg robot_model_name)" />
+        <!-- <plugin name="gz::sim::systems::TouchPlugin" filename="gz-sim-touchplugin-system">
+                <target>$(arg robot_model_name)</target>
+                <namespace>wall</namespace>
+                <time>0.1</time>
+                <enabled>true</enabled>
+            </plugin> -->
+    </gazebo>
+
+</robot>
