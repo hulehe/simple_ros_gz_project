@@ -1,0 +1,57 @@
+<sdf version='1.11'>
+  <model name='wall'>
+    <link name='box'>
+      <inertial>
+        <pose>0 0 0 0 0 0</pose>
+        <mass>1.14395</mass>
+        <inertia>
+          <ixx>9.5329169999999994</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>0.023831999999999999</iyy>
+          <iyz>0</iyz>
+          <izz>9.5567489999999999</izz>
+        </inertia>
+      </inertial>
+      <collision name='box_fixed_joint_lump__wall_collision_collision'>
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <box>
+            <size>2 10 2</size>
+          </box>
+        </geometry>
+      </collision>
+      <visual name='box_visual'>
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <box>
+            <size>2 10 2</size>
+          </box>
+        </geometry>
+        <material>
+          <diffuse>1 1 0 1</diffuse>
+          <ambient>1 1 0 1</ambient>
+        </material>
+      </visual>
+      <sensor name='sensor_contact' type='contact'>
+        <contact>
+          <collision>box_fixed_joint_lump__wall_collision_collision</collision>
+          <topic>__default_topic__</topic>
+        </contact>
+      </sensor>
+    </link>
+    <static>true</static>
+    <plugin name='gz::sim::systems::TouchPlugin' filename='gz-sim-touchplugin-system'>
+      <target>diff_drive_robot</target>
+      <namespace>wall</namespace>
+      <time>0.0001</time>
+      <enabled>true</enabled>
+    </plugin>
+    <plugin name='gz::sim::systems::TriggeredPublisher' filename='gz-sim-triggered-publisher-system'>
+      <input topic='/wall/touched' type='gz.msgs.Boolean'>
+        <match>data: true</match>
+      </input>
+      <output topic='/model/diff_drive_robot/cmd_vel' type='gz.msgs.Twist'>linear: {x: -1.0}, angular: {z: 0.0}</output>
+    </plugin>
+  </model>
+</sdf>

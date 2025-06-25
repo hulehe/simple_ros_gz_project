@@ -50,14 +50,15 @@ def launch_setup(context, *args, **kwargs):
     
 
     # wall_sdf_file  =  os.path.join(pkg_gz_models, 'models', 'sdf', 'wall', 'model.sdf')
+    # wall_sdf_file  =  os.path.join(pkg_gz_models, 'models', 'urdf', 'output', 'wall.sdf')
     # with open(wall_sdf_file, 'r') as infp:
     #     wall_desc = infp.read()
     wall_xacro_file  =  os.path.join(pkg_gz_models, 'models', 'urdf', 'wall.xacro')
     wall_desc = xacro.process_file(
         wall_xacro_file,
-        mappings={
-            'robot_model_name': robot_model_name  # 设置外部参数
-        }
+        # mappings={
+        #     'robot_model_name': robot_model_name  # 设置外部参数
+        # }
     ).toxml()
 
     # Setup to launch the simulator and Gazebo world
@@ -123,7 +124,8 @@ def launch_setup(context, *args, **kwargs):
         executable='create',
         arguments=['-topic', '/wall_description', 
                    '-name', 'wall',
-                   '-x', '5'
+                   '-x', '5',
+                   '-z', '1'
                    ],
         output='screen'
     )

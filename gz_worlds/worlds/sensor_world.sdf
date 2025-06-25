@@ -305,6 +305,7 @@
         </model> -->
 
         <!-- <model name="wall">
+            <static>true</static>
             <pose>10 0 0 0 0 0</pose>
             <include merge="true">
                 <uri>package://wall</uri>
@@ -318,8 +319,8 @@
             <input type="gz.msgs.Boolean" topic="/wall/touched">
                 <match>data: true</match>
             </input>
-            <output type="gz.msgs.Twist" topic="/cmd_vel">
-                linear: {x: 0.0}, angular: {z: 0.0}
+            <output type="gz.msgs.Twist" topic="/model/diff_drive_robot/cmd_vel">
+                linear: {x: -1.0}, angular: {z: 0.0}
             </output>
         </plugin> -->
     </world>

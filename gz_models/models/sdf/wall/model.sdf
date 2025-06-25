@@ -1,7 +1,6 @@
 <?xml version='1.0'?>
 <sdf version='1.9'>
     <model name='wall'>
-        <static>true</static>
         <link name='box'>
             <pose />
             <inertial> <!--inertial
@@ -30,7 +29,7 @@
                     <specular>0.0 0.0 1.0 1</specular>
                 </material>
             </visual>
-            <collision name='collision'> <!--todo:
+            <collision name='wall_collision'> <!--todo:
                     describe why we need the collision-->
                 <geometry>
                     <box>
@@ -40,15 +39,15 @@
             </collision>
             <sensor name='sensor_contact' type='contact'>
                 <contact>
-                    <collision>collision</collision>
+                    <collision>wall_collision</collision>
                 </contact>
             </sensor>
         </link>
         <plugin filename="gz-sim-touchplugin-system"
             name="gz::sim::systems::TouchPlugin">
-            <target>vehicle_blue</target>
+            <target>diff_drive_robot</target>
             <namespace>wall</namespace>
-            <time>0.1</time>
+            <time>0.0001</time>
             <enabled>true</enabled>
         </plugin>
     </model>

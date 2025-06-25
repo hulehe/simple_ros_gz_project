@@ -7,19 +7,31 @@
     <xacro:property name="link_name" value="box" />
     <xacro:property name="visual_size" value="0.5 10.0 2.0" />
     <xacro:property name="color" value="1.0 1.0 0.0 1" />
+    <xacro:property name="color_name" value="yellow" />
     <xacro:property name="mass" value="1.14395" />
     <xacro:property name="ixx" value="9.532917" />
     <xacro:property name="iyy" value="0.023832" />
     <xacro:property name="izz" value="9.556749" />
 
-    <xacro:macro name="touch_plugin" params="target">
-        <plugin name="touch_${target}" filename="gz-sim-touchplugin-system">
+    <!-- <xacro:macro name="touch_plugin" params="target">
+        <plugin filename="gz-sim-touchplugin-system"
+            name="gz::sim::systems::TouchPlugin">
             <target>${target}</target>
             <namespace>wall</namespace>
-            <time>0.1</time>
+            <time>0.0001</time>
             <enabled>true</enabled>
         </plugin>
-    </xacro:macro>
+
+        <plugin filename="gz-sim-triggered-publisher-system"
+            name="gz::sim::systems::TriggeredPublisher">
+            <input type="gz.msgs.Boolean" topic="/wall/touched">
+                <match>data: true</match>
+            </input>
+            <output type="gz.msgs.Twist" topic="/model/${target}/cmd_vel">
+                linear: {x: 0.0}, angular: {z: 0.0}
+            </output>
+        </plugin>
+    </xacro:macro> -->
 
     <link name="${link_name}">
         <inertial>
@@ -31,11 +43,11 @@
             <geometry>
                 <box size="${visual_size}" />
             </geometry>
-            <material name="blue">
+            <material name="${color_name}">
                 <color rgba="${color}" />
             </material>
         </visual>
-        <collision>
+        <collision name="wall_collision">
             <origin xyz="0 0 0" rpy="0 0 0" />
             <geometry>
                 <box size="${visual_size}" />
@@ -43,22 +55,18 @@
         </collision>
     </link>
 
-    <gazebo reference="${link_name}">
-        <!-- Contact sensor -->
-        <sensor name="sensor_contact" type="contact">
+    <!-- <gazebo reference="${link_name}">
+        <sensor name='sensor_contact' type='contact'>
             <contact>
-                <collision>collision</collision>
+                <collision>wall_collision</collision>
             </contact>
         </sensor>
+    </gazebo> -->
 
+    <gazebo>
+        <static>true</static>
         <!-- Touch plugin -->
-        <xacro:touch_plugin target="$(arg robot_model_name)" />
-        <!-- <plugin name="gz::sim::systems::TouchPlugin" filename="gz-sim-touchplugin-system">
-                <target>$(arg robot_model_name)</target>
-                <namespace>wall</namespace>
-                <time>0.1</time>
-                <enabled>true</enabled>
-            </plugin> -->
+        <!-- <xacro:touch_plugin target="$(arg robot_model_name)" /> -->
     </gazebo>
 
 </robot>
