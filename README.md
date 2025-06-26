@@ -1,81 +1,80 @@
-# ros_gz_project_template
-A template project integrating ROS 2 and Gazebo simulator.
+# simple_ros_gz_project
+**作者：hulehe**  
+**更新日期：2025/6/26**  
+这是一个在gazebo仿真环境下使用ros控制小车移动的演示项目。项目结构参考github上的gazebosim/ros_gz_project_template。
 
-## Included packages
+## 项目包含的包 Included packages
 
-* `gz_models` - holds the sdf description of the simulated system and any other assets.
+* `gz_models` - 存放model的xacro、urdf和sdf文件
 
-* `gz_worlds` - holds gazebo specific code and configurations. Namely this is where systems end up.
+* `gz_worlds` - 存放gazebo仿真世界的sdf文件和插件代码
 
-* `ros_application` - holds ros2 specific code and configurations.
+* `ros_application` - 存放ros2代码和配置文件
 
-* `ros_gz_bringup` - holds launch files and high level utilities.
+* `ros_gz_bringup` - 存放启动文件和高层应用（如rviz和ros_gz_bridge）的配置文件
 
 
-## Install
+## 安装 Install
 
-For using the template with Gazebo Fortress switch to the `fortress` branch of this repository, otherwise use the default branch `main` for Gazebo Harmonic onwards.
+### 配置运行环境和依赖 Requirements
 
-### Requirements
+1. 不限但推荐使用Ubuntu24.04
+    - 注意：如果你使用的是wsl ubuntu desktop，并且你的电脑配有nvidia显卡，请.bashrc中配置`export LIBGL_ALWAYS_SOFTWARE=1`以保证gazebo的正常运行。因为wsl环境无法直接调用电脑的显卡。LIBGL_ALWAYS_SOFTWARE=1显性让OpenGL使用CPU而不是GPU进行gazebo渲染。
 
-1. Choose a ROS and Gazebo combination https://gazebosim.org/docs/latest/ros_installation
+2. 不限但推荐使用ROS jazzy desktop版本。安装ros开发依赖。
 
-   Note: If you're using a specific and unsupported Gazebo version with ROS 2, you might need to set the `GZ_VERSION` environment variable, for example:
+3. 进入gazebo官网，按照说明安装和上步已经安装的ros版本匹配的gazebo
+    - gazebo官网: https://gazebosim.org/docs/latest/ros_installation/
+    - gazebo安装命令
+        ```bash
+        sudo apt-get install ros-${ROS_DISTRO}-ros-gz
+        ```
+    - 安装后可以使用gz sim进行gazebo测试。
+        - 注意：gazebo库默认被安装到/opt/ros/jazzy/opt目录下。需要重新执行`source /opt/ros/jazzy/setup.bash`才能让命令行找到`gz sim`命令。
 
-    ```bash
-    export GZ_VERSION=harmonic
-    ```
-    Also need to build [`ros_gz`](https://github.com/gazebosim/ros_gz) and [`sdformat_urdf`](https://github.com/ros/sdformat_urdf) from source if binaries are not available for your chosen combination.
 
-1. Install necessary tools
+## 使用 Use
 
-    ```bash
-    sudo apt install python3-vcstool python3-colcon-common-extensions git wget
-    ```
-
-### Use as template
-Directly `Use this template` and create your project repository on Github.
-
-Or start by creating a workspace and cloning the template repository:
+1. 创建工作空间，克隆代码，把simple_ros_gz_project改成src
 
    ```bash
-   mkdir -p ~/template_ws/src
-   cd ~/template_ws/src
-   git clone https://github.com/gazebosim/ros_gz_project_template.git
+   mkdir -p ~/template_ws
+   cd ~/template_ws
+   git clone https://github.com/hulehe/simple_ros_gz_project.git
+   mv simple_ros_gz_project src
    ```
 
-## Usage
-
-1. Install dependencies
+2. 安装ros依赖 Install dependencies
 
     ```bash
-    cd ~/template_ws
     source /opt/ros/$ROS_DISTRO/setup.bash
     sudo rosdep init
     rosdep update
     rosdep install --from-paths src --ignore-src -r -i -y --rosdistro $ROS_DISTRO
     ```
 
-1. Build the project
+3. 编译项目 Build the project
 
     ```bash
-    colcon build --cmake-args -DBUILD_TESTING=ON
+    colcon build
     ```
 
-1. Source the workspace
+4. 配置项目运行环境 Source the workspace
 
     ```bash
     . ~/template_ws/install/setup.sh
     ```
 
-1. Launch the simulation
+5. 启动程序 Launch the simulation
 
     ```bash
-    ros2 launch ros_gz_example_bringup diff_drive.launch.py
+    ros2 launch ros_gz_bringup sensor_world.launch.py
     ```
-1. Publish /cmd_vel to drive vehicle to move
+
+6. 发布/cmd_vel启动小车 Publish /cmd_vel to drive vehicle to move
     ```bash
     ros2 topic pub --once /diff_drive_robot/cmd_vel geometry_msgs/msg/Twist "{linear: {x: 2.0, y: 0.0, z: 0.0}, angular: {x: 0.0, y: 0.0, z: -0.5}}"
     ```
 
-For a more detailed guide on using this template see [documentation](https://gazebosim.org/docs/latest/ros_gz_project_template_guide).
+---
+**作者主页：** www.lehe.life
