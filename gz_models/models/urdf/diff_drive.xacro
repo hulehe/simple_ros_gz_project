@@ -24,7 +24,7 @@
 
     <xacro:property name="lidar_size" value="0.1" />
     <xacro:property name="lidar_mass" value="0.1" />
-    <xacro:property name="lidar_z_offset" value="0.5" />
+    <xacro:property name="lidar_z_offset" value="0.33" />
 
     <!-- Wheel Macro -->
     <xacro:macro name="wheel" params="name side">
