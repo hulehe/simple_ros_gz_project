@@ -12,6 +12,7 @@ private:
     rclcpp::Subscription<sensor_msgs::msg::LaserScan>::SharedPtr scan_sub_;
     std::string robot_name;
     double lidar_offset;
+    double x_speed;
 
 public:
     ObstacleAvoider() : Node("obstacle_avoider")
@@ -23,6 +24,9 @@ public:
 
         this->declare_parameter("lidar_offset", 1.0);
         this->get_parameter("lidar_offset", lidar_offset);
+
+        this->declare_parameter("x_speed", 0.5);
+        this->get_parameter("x_speed", x_speed);
 
         cmd_pub_ = this->create_publisher<geometry_msgs::msg::Twist>(cmd_vel_topic, 10);
         scan_sub_ = this->create_subscription<sensor_msgs::msg::LaserScan>(
@@ -69,7 +73,7 @@ private:
         else
         {
             // 正常前进
-            twist_msg.linear.x = 0.2;
+            twist_msg.linear.x = x_speed;
             twist_msg.angular.z = 0.0;
         }
 
