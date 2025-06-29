@@ -1,6 +1,7 @@
 # simple_ros_gz_project
 **作者：hulehe**  
-**更新日期：2025/6/26**  
+**创建日期：2025/6/26**  
+**最近更新日期：2025/6/29**  
 这是一个在gazebo仿真环境下使用ros控制小车移动的演示项目。项目结构参考github上的gazebosim/ros_gz_project_template。
 
 ## 项目包含的包 Included packages
@@ -74,6 +75,14 @@
 6. 发布/cmd_vel启动小车 Publish /cmd_vel to drive vehicle to move
     ```bash
     ros2 topic pub --once /diff_drive_robot/cmd_vel geometry_msgs/msg/Twist "{linear: {x: 2.0, y: 0.0, z: 0.0}, angular: {x: 0.0, y: 0.0, z: -0.5}}"
+    ```
+
+7. 启动ros节点，控制小车躲避障碍物
+    ```bash
+    ros2 run ros_application obstacle_avoider --ros-args \
+        -p robot_name:=diff_drive_robot \
+        -p lidar_offset:=1.0 \
+        -p x_speed:=0.5
     ```
 
 ---
