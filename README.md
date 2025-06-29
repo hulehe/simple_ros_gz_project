@@ -2,7 +2,7 @@
 **作者：hulehe**  
 **创建日期：2025/6/26**  
 **最近更新日期：2025/6/29**  
-这是一个在gazebo仿真环境下使用ros控制小车移动的演示项目。项目结构参考github上的gazebosim/ros_gz_project_template。
+这是一个在gazebo仿真环境下使用ros控制小车移动的演示项目。项目结构源于github上的gazebosim/ros_gz_project_template的修改。
 
 ## 项目包含的包 Included packages
 
