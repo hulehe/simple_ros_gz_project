@@ -2,8 +2,8 @@
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
   <name>ros_application</name>
-  <version>0.0.0</version>
-  <description>Application-specific implementations for the ros_gz_project example</description>
+  <version>1.0.0</version>
+  <description>Application-specific implementations for the simple_ros_gz_project</description>
   <maintainer email="huzhenkai@naver.com">Lehe Hu</maintainer>
   <license>Apache 2.0</license>
   <author>Lehe Hu</author>
