@@ -1,39 +1,18 @@
 # gz_worlds
+该包用于存储gazebo world的相关文件。
 
-This subfolder holds example source files and a corresponding `CMakeLists.txt` file, as a starting point for compiling Gazebo implementations in a personal repository (i.e. not part of the official Gazebo source repositories).
-
-The provided `CMakeLists.txt` file contains the directives to compile two example Gazebo systems: `BasicSystem` and `FullSystem`.
-
-For more information on Gazebo Sim systems, see following [Gazebo Sim tutorials](https://gazebosim.org/api/sim/7/tutorials.html):
-
-- [Create System Plugins](https://gazebosim.org/api/sim/7/createsystemplugins.html)
-- [Migration from Gazebo Classic: Plugins](https://gazebosim.org/api/sim/7/migrationplugins.html)
-
-
-## `BasicSystem` and `FullSystem`
-
-`BasicSystem` is an example system that implements only the `ISystemPostUpdate` interface:
-
-```c++
- class BasicSystem:
-    public gz::sim::System,
-    public gz::sim::ISystemPostUpdate
-```
-
-`FullSystem` is an example system that implements all of the system interfaces:
-
-```c++
-class FullSystem:
-    public gz::sim::System,
-    public gz::sim::ISystemConfigure,
-    public gz::sim::ISystemPreUpdate,
-    public gz::sim::ISystemUpdate,
-    public gz::sim::ISystemPostUpdate,
-    public gz::sim::ISystemReset
-```
-
-See the comments in the source files for further documentation.
-
-## `CMakeLists.txt`
-
-The provided `CMakeLists.txt` file contains comments that clarify the different sections and commands, and how to apply these to your project.
+## gz_world包结构
+- `worlds`文件夹存储sdf文件
+- `include`和`src`目录用于保存world自定义插件代码
+    - BasicSystem.cc和FullSystem.cc是插件代码案例，没有执行任何功能
+        - Configure方法在gazebo启动时被调用
+        - PreUpdate方法在每一帧刷新前被调用，经常用于设置仿真物体的属性
+        - Update方法在每一帧刷新时被调用（不经常使用）
+        - PostUpdate方法在每一帧刷新后被调用，经常用于获取仿真物体的最新属性
+        - Reset方法在仿真被reset后被调用，用于设置仿真物体的初始属性
+- `hooks`文件夹保存被ament_environment_hooks函数调用的dsv.ini配置文件
+    - gz_worlds.dsv.ini文件中配置了GZ_SIM_RESOURCE_PATH环境变量，使其指向安装目录下的share/@PROJECT_NAME@/words文件夹。
+    - gz_worlds.dsv.ini文件中还配置了GZ_SIM_SYSTEM_PLUGIN_PATH变量，指向安装目录下的lib/@PROJECT_NAME@/。
+- `CMakeLists.txt`文件是cmake配置文件。内置注释。
+- `package.xml`文件是ros配置文件。
+    - 如果world代码中需要引入gz_models中的sdf文件，则说明该包依赖gz_models包。必须在package.xml文件中添加<depend>gz_models</depend>，让构建程序按照正确顺序构建。否则，会在构建中报错。

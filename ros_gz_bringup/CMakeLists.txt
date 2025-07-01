@@ -1,19 +1,20 @@
+# 设置 CMake 最低版本要求
 cmake_minimum_required(VERSION 3.5)
 
+# 定义项目名称，必须与 package.xml 中的 <name> 一致
 project(ros_gz_bringup)
 
+# 查找并引入 ROS 2 的构建系统支持（ament_cmake 是 ROS 2 的标准构建工具）
 find_package(ament_cmake REQUIRED)
-find_package(gz_models REQUIRED)
-find_package(gz_worlds REQUIRED)
 
-# Install project launch files
+# 安装ros2 launch文件到安装目录的 share/<项目名>/ 下
 install(
   DIRECTORY
     launch/
   DESTINATION share/${PROJECT_NAME}/launch
 )
 
-# Install project configuration files
+# 安装ros2 launch文件到安装目录的 share/<项目名>/ 下
 install(
   DIRECTORY
     config/
