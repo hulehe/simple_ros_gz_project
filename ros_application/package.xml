@@ -12,9 +12,9 @@
   <depend>sensor_msgs</depend>
   <depend>geometry_msgs</depend>
 
-  <depend>gz_models</depend>
+  <!-- <depend>gz_models</depend>
   <depend>gz_worlds</depend>
-  <depend>ros_gz_bringup</depend>
+  <depend>ros_gz_bringup</depend> -->
 
   <buildtool_depend>ament_cmake</buildtool_depend>
 

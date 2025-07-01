@@ -1,4 +1,6 @@
 # Copyright 2022 Open Source Robotics Foundation, Inc.
+# Modified by Lehe Hu, 2025
+# Changes: Refactored class structure.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -13,9 +15,7 @@
 # limitations under the License.
 
 import os
-
 from ament_index_python.packages import get_package_share_directory
-
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument, OpaqueFunction
 from launch.actions import IncludeLaunchDescription
@@ -24,7 +24,6 @@ from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import LaunchConfiguration
 import xacro
 from launch_ros.actions import Node
-from launch import LaunchContext
 
 def launch_setup(context, *args, **kwargs):
     # Setup project paths
