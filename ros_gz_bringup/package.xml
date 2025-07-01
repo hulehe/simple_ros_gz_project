@@ -14,7 +14,7 @@
   <depend>sdformat_urdf</depend>
   <depend>gz_models</depend>
   <depend>gz_worlds</depend>
-  <!-- <depend>ros_application</depend> -->
+  <depend>ros_application</depend>
 
   <buildtool_depend>ament_cmake</buildtool_depend>
 

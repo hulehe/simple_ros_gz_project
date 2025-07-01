@@ -7,6 +7,10 @@
 - `CMakeLists.txt`：cmake配置文件。内置注释。
 - `package.xml`：ros配置文件
 
+## ros_gz
+- gazebo研发团队开发，推荐ros用户使用的，通过ros使用gazebo的ros工具包
+- 参考 https://github.com/gazebosim/ros_gz
+
 ## ros_gz_bridge配置文件
 - 使用yaml文件格式
 - 参考 https://github.com/gazebosim/ros_gz/tree/ros2/ros_gz_bridge
