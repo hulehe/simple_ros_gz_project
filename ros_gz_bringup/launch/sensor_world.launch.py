@@ -36,6 +36,7 @@ def launch_setup(context, *args, **kwargs):
 
     # 动态获取启动参数 robot_model_name，用于后续命名机器人实体与设置命名空间。
     robot_model_name = LaunchConfiguration('robot_model_name').perform(context)
+    static_world_model_name = LaunchConfiguration('static_world_model_name').perform(context)
 
     # Load the SDF file from "description" package
     # robot_xacro_file  =  os.path.join(pkg_gz_models, 'models', 'sdf', 'diff_drive', 'model.sdf')
@@ -64,6 +65,9 @@ def launch_setup(context, *args, **kwargs):
         #     'robot_model_name': robot_model_name  # 设置外部参数
         # }
     ).toxml()
+
+    # 
+    static_world_model_file  =  os.path.join(pkg_gz_worlds, 'worlds', static_world_model_name, 'model.sdf')
 
     # 加载仿真世界文件路径
     world_file = os.path.join(pkg_gz_worlds,'worlds','sensor_world.sdf')
@@ -145,6 +149,16 @@ def launch_setup(context, *args, **kwargs):
         output='screen'
     )
 
+    # 动态在 gazebo 世界中添加静态背景
+    static_world_model = Node(
+        package='ros_gz_sim',
+        executable='create',
+        arguments=['-file', static_world_model_file, 
+                   '-name', static_world_model_name,
+                   ],
+        output='screen'
+    )
+
     # 启动 rviz
     # 使用 rviz 配置文件
     # 设置启动条件：启动参数 rviz=true；否则，不启动rviz
@@ -172,11 +186,12 @@ def launch_setup(context, *args, **kwargs):
             robot_state_publisher,  
             wall_state_publisher, 
             gz_sim, 
-            diff_drive, 
-            wall,
+            # diff_drive, 
+            # wall,
+            static_world_model,
             bridge, 
-            rviz,
-            obstacle_avoider
+            # rviz,
+            # obstacle_avoider
         ]
 
 def generate_launch_description():
@@ -187,5 +202,6 @@ def generate_launch_description():
     return LaunchDescription([
         DeclareLaunchArgument('rviz', default_value='true', description='Open RViz.'),
         DeclareLaunchArgument('robot_model_name', default_value='diff_drive_robot', description='Robot model name in world.'),
+        DeclareLaunchArgument('static_world_model_name', default_value='baylands', description='Static world model name.'),
         OpaqueFunction(function=launch_setup)
     ])
