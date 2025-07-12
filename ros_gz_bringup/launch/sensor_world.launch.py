@@ -95,16 +95,16 @@ def launch_setup(context, *args, **kwargs):
     )
 
     # 为静态物体 wall 创建 robot_state_publisher 节点
-    # wall_state_publisher = Node(
-    #     package='robot_state_publisher',
-    #     executable='robot_state_publisher',
-    #     name='wall_state_publisher',  # 节点名
-    #     output='screen',
-    #     parameters=[
-    #         {'robot_description': wall_desc},
-    #     ],
-    #     remappings=[('robot_description', 'wall_description')]  # 映射发布话题 robot_description -> wall_description
-    # )
+    wall_state_publisher = Node(
+        package='robot_state_publisher',
+        executable='robot_state_publisher',
+        name='wall_state_publisher',  # 节点名
+        output='screen',
+        parameters=[
+            {'robot_description': wall_desc},
+        ],
+        remappings=[('robot_description', 'wall_description')]  # 映射发布话题 robot_description -> wall_description
+    )
 
     # 启动 ros_gz_bridge
     # 使用yaml配置文件映射ros话题和gazebo话题的关系    
@@ -134,21 +134,21 @@ def launch_setup(context, *args, **kwargs):
         executable='create',
         arguments=['-topic', '/'+robot_model_name+'_description', 
                    '-name', robot_model_name,  # 定义机器人名字
-                   '-z', '5'],  # 定义初始位置，机器人坐标原点高出地面1米
+                   '-z', '3'],  # 定义初始位置，机器人坐标原点高出地面1米
         output='screen'
     )
 
     # 动态在 gazebo 世界中添加 wall
-    # wall = Node(
-    #     package='ros_gz_sim',
-    #     executable='create',
-    #     arguments=['-topic', '/wall_description', 
-    #                '-name', 'wall',
-    #                '-x', '5',
-    #                '-z', '1'
-    #                ],
-    #     output='screen'
-    # )
+    wall = Node(
+        package='ros_gz_sim',
+        executable='create',
+        arguments=['-topic', '/wall_description', 
+                   '-name', 'wall',
+                   '-x', '5',
+                   '-z', '2'
+                   ],
+        output='screen'
+    )
 
     # 动态在 gazebo 世界中添加静态背景
     static_world_model = Node(
@@ -175,7 +175,7 @@ def launch_setup(context, *args, **kwargs):
         package='ros_application',
         executable='obstacle_avoider',
         arguments=['-robot_name', robot_model_name, 
-                   '-lidar_offset', '1.0',
+                   '-lidar_offset', '0.7',
                    '-x_speed', '0.5',
                    ],
         output='screen'
@@ -185,10 +185,10 @@ def launch_setup(context, *args, **kwargs):
     # 需要考虑节点启动顺序。例如：必须启动 gz_sim 后，才能正常启动 diff_drive 和 wall
     return [
             robot_state_publisher,  
-            # wall_state_publisher, 
+            wall_state_publisher, 
             gz_sim, 
             diff_drive, 
-            # wall,
+            wall,
             static_world_model,
             bridge, 
             rviz,
