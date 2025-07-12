@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <sdf version="1.8">
     <world name="sensor_world">
-        <physics name="1ms" type="ignored">
-            <max_step_size>0.001</max_step_size>
+        <physics name="10ms" type="ode">
+            <max_step_size>0.01</max_step_size>
             <real_time_factor>1.0</real_time_factor>
         </physics>
         <plugin
@@ -42,7 +42,7 @@
 
                 <engine>ogre2</engine>
                 <scene>scene</scene>
-                <ambient_light>0.4 0.4 0.4</ambient_light>
+                <ambient_light>0.2 0.2 0.2</ambient_light>
                 <background_color>0.8 0.8 0.8</background_color>
                 <camera_pose>-6 0 6 0 0.5 0</camera_pose>
                 <camera_clip>
@@ -87,7 +87,7 @@
                     <property key="showTitleBar" type="bool">false</property>
                 </gz-gui>
             </plugin>
-            <plugin filename="MarkerManager" name="Marker manager">
+            <!-- <plugin filename="MarkerManager" name="Marker manager">
                 <gz-gui>
                     <property key="resizable" type="bool">false</property>
                     <property key="width" type="double">5</property>
@@ -95,7 +95,7 @@
                     <property key="state" type="string">floating</property>
                     <property key="showTitleBar" type="bool">false</property>
                 </gz-gui>
-            </plugin>
+            </plugin> -->
             <plugin filename="SelectEntities" name="Select Entities">
                 <gz-gui>
                     <anchors target="Select entities">
@@ -119,7 +119,7 @@
                 </gz-gui>
             </plugin>
 
-            <plugin filename="Spawn" name="Spawn Entities">
+            <!-- <plugin filename="Spawn" name="Spawn Entities">
                 <gz-gui>
                     <anchors target="Select entities">
                         <line own="right" target="right" />
@@ -131,7 +131,7 @@
                     <property key="state" type="string">floating</property>
                     <property key="showTitleBar" type="bool">false</property>
                 </gz-gui>
-            </plugin>
+            </plugin> -->
 
             <!-- World control -->
             <plugin filename="WorldControl" name="World control">
@@ -181,7 +181,7 @@
             </plugin>
 
             <!-- Insert lights -->
-            <plugin filename="Lights" name="Lights">
+            <!-- <plugin filename="Lights" name="Lights">
                 <gz-gui>
                     <property key="resizable" type="bool">false</property>
                     <property key="x" type="double">350</property>
@@ -192,7 +192,7 @@
                     <property key="showTitleBar" type="bool">false</property>
                     <property key="cardBackground" type="string">#666666</property>
                 </gz-gui>
-            </plugin>
+            </plugin> -->
 
             <!-- Translate / rotate -->
             <plugin filename="TransformControl" name="Transform control">
@@ -209,7 +209,7 @@
             </plugin>
 
             <!-- Screenshot -->
-            <plugin filename="Screenshot" name="Screenshot">
+            <!-- <plugin filename="Screenshot" name="Screenshot">
                 <gz-gui>
                     <property key="resizable" type="bool">false</property>
                     <property key="x" type="double">250</property>
@@ -220,10 +220,10 @@
                     <property key="showTitleBar" type="bool">false</property>
                     <property key="cardBackground" type="string">#777777</property>
                 </gz-gui>
-            </plugin>
+            </plugin> -->
 
             <!-- Video recorder -->
-            <plugin filename="VideoRecorder" name="VideoRecorder">
+            <!-- <plugin filename="VideoRecorder" name="VideoRecorder">
                 <gz-gui>
                     <property key="resizable" type="bool">false</property>
                     <property key="x" type="double">300</property>
@@ -240,7 +240,7 @@
                     <lockstep>false</lockstep>
                     <bitrate>4000000</bitrate>
                 </record_video>
-            </plugin>
+            </plugin> -->
 
             <!-- Entity tree -->
             <plugin filename="EntityTree" name="Entity tree">
@@ -258,7 +258,7 @@
         </gui>
 
         <light type="directional" name="sun">
-            <cast_shadows>true</cast_shadows>
+            <cast_shadows>false</cast_shadows>
             <pose>0 0 10 0 0 0</pose>
             <diffuse>0.8 0.8 0.8 1</diffuse>
             <specular>0.2 0.2 0.2 1</specular>
