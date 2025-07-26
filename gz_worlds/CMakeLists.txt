@@ -18,10 +18,17 @@ find_package(ament_cmake REQUIRED)
 # set(GZ_COMMON_VER ${gz-common5_VERSION_MAJOR})
 
 # 添加Gazebo Harmonic库搜索路径
-find_package(gz-sim8 REQUIRED)
+# find_package(gz-sim8 REQUIRED)
+# 使用 vendor 可以不用写版本号，可参考文档
+find_package(gz_common_vendor REQUIRED)
+find_package(gz-common REQUIRED)
+find_package(gz_plugin_vendor REQUIRED)
+find_package(gz-plugin REQUIRED)
+find_package(gz_sim_vendor REQUIRED)
+find_package(gz-sim REQUIRED)
 
 # 给GZ_SIM_VER变量赋值为gz-sim8_VERSION_MAJOR的值
-set(GZ_SIM_VER ${gz-sim8_VERSION_MAJOR})
+# set(GZ_SIM_VER ${gz-sim8_VERSION_MAJOR})
 
 
 
@@ -43,7 +50,10 @@ target_include_directories(
 # PRIVATE 表示链接仅影响 BasicSystem 本身，不传递给依赖它的其他目标
 target_link_libraries(
   BasicSystem PRIVATE
-  gz-sim${GZ_SIM_VER}::gz-sim${GZ_SIM_VER}
+  # gz-sim${GZ_SIM_VER}::gz-sim${GZ_SIM_VER}
+  gz-common::gz-common
+  gz-plugin::gz-plugin
+  gz-sim::gz-sim
 )
 
 
@@ -57,8 +67,13 @@ target_include_directories(
   FullSystem PRIVATE include
 )
 
-target_link_libraries(FullSystem PRIVATE
-  gz-sim${GZ_SIM_VER}::gz-sim${GZ_SIM_VER})
+target_link_libraries(
+  FullSystem PRIVATE
+  # gz-sim${GZ_SIM_VER}::gz-sim${GZ_SIM_VER}
+  gz-common::gz-common
+  gz-plugin::gz-plugin
+  gz-sim::gz-sim
+)
 
 # 将 BasicSystem 和 FullSystem 两个目标（通常是生成的库文件）安装到指定目录
 # 安装路径为安装目录下的lib/<项目名>
